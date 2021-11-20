@@ -1,0 +1,34 @@
+.create {
+    display: flex;
+    &__button {
+        border: 1px solid black;
+        cursor: pointer;
+        width: 200px;
+        height: 25px;
+
+        text-align: center;
+        padding: 5px;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+            background-color: #dfdfdf;
+        }
+        &:active {
+            background-color: #c7c7c7;
+            box-shadow: 2px 0px 2px 0px rgb(34 60 80 / 60%);
+        }
+        span {
+            margin-right: 10px;
+        }
+    }
+    input {
+        margin-left: 5px;
+        width: 204px;
+        height: 31px;
+    }
+    .input__error {
+        border: 1px solid red;
+    }
+}

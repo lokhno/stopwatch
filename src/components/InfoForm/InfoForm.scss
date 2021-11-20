@@ -1,0 +1,46 @@
+.form {
+    padding: 20px;
+    position: absolute;
+    top: 10%;
+    left: calc(50% - 300px);
+    width: 600px;
+    z-index: 10;
+    background-color: #fff;
+    border: 1px solid black;
+    box-shadow: 7px -4px 8px 0px rgba(34, 60, 80, 0.6);
+    border-radius: 10px;
+    &__controller {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+    }
+    &__item {
+        margin: 5px 0;
+    }
+    .form-item {
+        display: flex;
+        &__time {
+            margin: auto 20px;
+        }
+        &__title {
+            margin: auto 0;
+        }
+       
+    }
+}
+
+.background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    cursor: pointer;
+    &_hide {
+        display: none;
+    }
+}

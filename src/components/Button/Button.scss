@@ -1,0 +1,21 @@
+.button {
+    width: 40px;
+    cursor: pointer;
+    svg {
+        width: 30px;
+        height: 30px;
+    }
+    span {
+        border-radius: 10px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    span:hover {
+        background-color: #dfdfdf;
+    }
+    span:active {
+        background-color: #c7c7c7;
+    }
+}
