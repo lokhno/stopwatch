@@ -2,15 +2,20 @@ import { StopwatchesState, StopwatchActions, StopwatchesActionNamesEnum } from "
 import { IStopwatch, ITimeInterval } from "../../../types/stopwatch";
 
 const initialState: StopwatchesState = {
-    nextID: 2,
-    items: [
+    nextID: localStorage.stopwatchesNextID ||  2,
+    items: localStorage.stopwatchesItems && JSON.parse(localStorage.stopwatchesItems) || [
         {
             _id: 1,
-            title: "First stopwatch",
+            title: "Тест секундомер",
             timeIntervals: [],
         },
     ],
 };
+
+const setLocalStorage = (items: IStopwatch[], id:number) => {
+    localStorage.stopwatchesNextID = id;
+    localStorage.stopwatchesItems = JSON.stringify(items)
+}
 
 const addInterval = (items: IStopwatch[], id: number, interval: ITimeInterval): IStopwatch[] => {
     let newItems: IStopwatch[] = [...items];
@@ -30,9 +35,10 @@ export const excludeItems = (items: IStopwatch[], id: number): IStopwatch[] => {
 };
 
 export const stopwatchesReducer = (state = initialState, action: StopwatchActions): StopwatchesState => {
+    let tmpState;
     switch (action.type) {
         case StopwatchesActionNamesEnum.ADD_STOPWATCH:
-            return {
+            tmpState = {
                 ...state,
                 items: [
                     ...state.items,
@@ -43,9 +49,11 @@ export const stopwatchesReducer = (state = initialState, action: StopwatchAction
                     },
                 ],
                 nextID: state.nextID + 1,
-            };
+            }
+            setLocalStorage(tmpState.items, tmpState.nextID)
+            return tmpState;
         case StopwatchesActionNamesEnum.EDIT_STOPWATCH:
-            return {
+            tmpState = {
                 ...state,
                 items: [
                     ...excludeItems(state.items, action.payload._id),
@@ -55,14 +63,18 @@ export const stopwatchesReducer = (state = initialState, action: StopwatchAction
                         timeIntervals: action.payload.timeIntervals,
                     },
                 ],
-            };
+            }
+            setLocalStorage(tmpState.items, tmpState.nextID)
+            return tmpState;
         case StopwatchesActionNamesEnum.DELETE_STOPWATCHS:
-            return {
+            tmpState = {
                 ...state,
                 items: [...excludeItems(state.items, action.payload)],
-            };
+            }
+            setLocalStorage(tmpState.items, tmpState.nextID)
+            return tmpState;
         case StopwatchesActionNamesEnum.DELETE_TIME_INTERVALS:
-            return {
+            tmpState = {
                 ...state,
                 items: [
                     ...state.items.map((item) => {
@@ -72,10 +84,11 @@ export const stopwatchesReducer = (state = initialState, action: StopwatchAction
                         return item;
                     }),
                 ],
-            };
+            }
+            setLocalStorage(tmpState.items, tmpState.nextID)
+            return tmpState;
         case StopwatchesActionNamesEnum.CHANGE_TIME_INTERVAL:
-
-            return {
+            tmpState = {
                 ...state,
                 items: [
                     ...state.items.map((item) => {
@@ -106,12 +119,16 @@ export const stopwatchesReducer = (state = initialState, action: StopwatchAction
                         return item;
                     }),
                 ],
-            };
+            }
+            setLocalStorage(tmpState.items, tmpState.nextID)
+            return tmpState;
         case StopwatchesActionNamesEnum.ADD_TIME_INTARVAL:
-            return {
+            tmpState = {
                 ...state,
                 items: addInterval(state.items, action.payload.id, action.payload.interval),
-            };
+            }
+            setLocalStorage(tmpState.items, tmpState.nextID)
+            return tmpState;
         default:
             return state;
     }

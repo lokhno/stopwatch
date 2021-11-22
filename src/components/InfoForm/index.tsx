@@ -22,7 +22,7 @@ export const InfoForm: React.FC<InfoFormProps> = ({ timeIntervals, onCloseForm, 
                 {timeIntervals.length === 0
                     ? "Нет отсечек времени"
                     : timeIntervals.map((item, index) => {
-                          return <InfoFormItem item={item} stopwatchId={stopwatchId}/>;
+                          return <InfoFormItem key={index} item={item} stopwatchId={stopwatchId}/>;
                       })}
             </div>
         </>
