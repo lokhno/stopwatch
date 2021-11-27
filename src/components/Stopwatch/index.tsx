@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     PlayCircleOutlined,
     PauseCircleOutlined,
@@ -32,6 +32,10 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
     const [editFrom, setEditFrom] = useState<boolean>(false);
     const [overlayHidden, setOverlayHidden] = useState(true);
 
+    let currentTimerNew = currentTimer;
+    console.log(state);
+    const ref = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         function onKeyup(e: KeyboardEvent) {
             if (e.key === "Escape") {
@@ -43,28 +47,38 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
             window.removeEventListener("keyup", onKeyup);
         };
     }, []);
-    let timerId = setTimeout(() => {
-        if (state === "goes") {
-            setCurrentTimer(currentTimer + 1000);
-        }
-    }, 1000);
+
+
     useEffect(() => {
+        console.log("Моунт");
+        let timerId = setInterval(() => {
+            console.log("state:", state, "; currentTimerNew: ", currentTimerNew);
+            if (state === "goes") {
+                currentTimerNew += 1000;
+                if (null !== ref.current) {
+                    ref.current.innerText = getTimeFromMilliseconds(currentTimerNew);
+                }
+                
+            }
+        }, 1000);
         return () => {
-            clearTimeout(timerId);
+            console.log("аумаунт");
+            clearInterval(timerId);
         };
-    }, [state, currentTimer]);
+    }, [state, start]);
 
     const toggleOverlay = () => {
         setOverlayHidden(!overlayHidden);
     };
 
     const onTimeMark = () => {
+        setStart(undefined);
         addTimeInterval(item._id, {
-            time: currentTimer - getStopwatchTime(item.timeIntervals),
+            time: currentTimerNew - getStopwatchTime(item.timeIntervals),
             startDate: start || new Date(),
             stopDate: new Date(),
         });
-        setStart(undefined);
+        
     };
 
     const onToggleState = () => {
@@ -75,6 +89,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
             setState("goes");
         }
         if (state === "goes") {
+            setCurrentTimer(currentTimerNew);
             setState("stoped");
         }
     };
@@ -94,7 +109,11 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
     };
     const deleteTimeIntervals = () => {
         deleteTimeIntervales(item._id);
-        setCurrentTimer(0)
+        currentTimerNew = 0;
+        if (null !== ref.current) {
+            ref.current.innerText = getTimeFromMilliseconds(currentTimerNew);
+        }
+        setCurrentTimer(0);
     };
 
     return (
@@ -133,7 +152,10 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
                 </div>
             </div>
 
-            <div className="stopwatch__timer">{getTimeFromMilliseconds(currentTimer)}</div>
+            <div className="stopwatch__timer" ref={ref}>
+                {getTimeFromMilliseconds(currentTimerNew)}
+                {/* {getTimeFromMilliseconds(currentTimer)} */}
+            </div>
 
             <div className="stopwatch__actions">
                 {state === "goes" ? (
