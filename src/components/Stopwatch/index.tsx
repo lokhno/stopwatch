@@ -32,8 +32,8 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
     const [editFrom, setEditFrom] = useState<boolean>(false);
     const [overlayHidden, setOverlayHidden] = useState(true);
 
-    let currentTimerNew = currentTimer;
-    console.log(state);
+    let currentTimerView = currentTimer;
+
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -50,19 +50,16 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
 
 
     useEffect(() => {
-        console.log("Моунт");
         let timerId = setInterval(() => {
-            console.log("state:", state, "; currentTimerNew: ", currentTimerNew);
             if (state === "goes") {
-                currentTimerNew += 1000;
+                currentTimerView += 1000;
                 if (null !== ref.current) {
-                    ref.current.innerText = getTimeFromMilliseconds(currentTimerNew);
+                    ref.current.innerText = getTimeFromMilliseconds(currentTimerView);
                 }
                 
             }
         }, 1000);
         return () => {
-            console.log("аумаунт");
             clearInterval(timerId);
         };
     }, [state, start]);
@@ -74,7 +71,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
     const onTimeMark = () => {
         setStart(undefined);
         addTimeInterval(item._id, {
-            time: currentTimerNew - getStopwatchTime(item.timeIntervals),
+            time: currentTimerView - getStopwatchTime(item.timeIntervals),
             startDate: start || new Date(),
             stopDate: new Date(),
         });
@@ -89,7 +86,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
             setState("goes");
         }
         if (state === "goes") {
-            setCurrentTimer(currentTimerNew);
+            setCurrentTimer(currentTimerView);
             setState("stoped");
         }
     };
@@ -109,9 +106,9 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
     };
     const deleteTimeIntervals = () => {
         deleteTimeIntervales(item._id);
-        currentTimerNew = 0;
+        currentTimerView = 0;
         if (null !== ref.current) {
-            ref.current.innerText = getTimeFromMilliseconds(currentTimerNew);
+            ref.current.innerText = getTimeFromMilliseconds(currentTimerView);
         }
         setCurrentTimer(0);
     };
@@ -153,7 +150,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
             </div>
 
             <div className="stopwatch__timer" ref={ref}>
-                {getTimeFromMilliseconds(currentTimerNew)}
+                {getTimeFromMilliseconds(currentTimerView)}
                 {/* {getTimeFromMilliseconds(currentTimer)} */}
             </div>
 
