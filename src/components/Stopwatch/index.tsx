@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import * as workerInterval from 'worker-interval';
 import {
     PlayCircleOutlined,
     PauseCircleOutlined,
@@ -50,7 +51,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
 
 
     useEffect(() => {
-        let timerId = setInterval(() => {
+        let timerId = workerInterval.setInterval(() => {
             if (state === "goes") {
                 currentTimerView += 1000;
                 if (null !== ref.current) {
@@ -60,7 +61,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ item }) => {
             }
         }, 1000);
         return () => {
-            clearInterval(timerId);
+            workerInterval.clearInterval(timerId || "_");
         };
     }, [state, start]);
 
