@@ -9,10 +9,12 @@ import "./Main.scss";
 interface MainProps {}
 
 export const Main: React.FC<MainProps> = () => {
+
     const stopwatches = useTypeSelector((state) => state.stopwatches.items);
 
     return (
         <div>
+
             <Create />
             {stopwatches.map((item) => {
                 return <Stopwatch key={item._id} item={item} />;

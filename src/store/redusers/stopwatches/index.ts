@@ -35,6 +35,7 @@ export const excludeItems = (items: IStopwatch[], id: number): IStopwatch[] => {
 };
 
 export const stopwatchesReducer = (state = initialState, action: StopwatchActions): StopwatchesState => {
+    console.log("state", state)
     let tmpState;
     switch (action.type) {
         case StopwatchesActionNamesEnum.ADD_STOPWATCH:
@@ -132,4 +133,5 @@ export const stopwatchesReducer = (state = initialState, action: StopwatchAction
         default:
             return state;
     }
+    
 };
